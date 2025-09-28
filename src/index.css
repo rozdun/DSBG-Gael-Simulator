@@ -1,68 +1,115 @@
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
+body { margin: 0; min-width: 320px; min-height: 100vh; }
+html { overflow-y: scroll; scrollbar-gutter: stable; }
 
 button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    padding: 0.6em 1.2em;
+    font-size: 1em;
+    font-weight: 500;
+    font-family: inherit;
+    cursor: pointer;
+    transition: border-color 0.25s;
 }
-button:hover {
-  border-color: #646cff;
+button:hover { border-color: #646cff; }
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(30px) scale(0.98); }
+    to   { opacity: 1; transform: translateX(0) scale(1); }
 }
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+.card-enter { opacity: 0; transform: translateX(20px); }
+.card-enter-active {
+    opacity: 1;
+    transform: translateX(0);
+    transition: opacity 0.4s ease, transform 0.4s ease;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+/* row */
+.card {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 5px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background: #f9f9f9;
+    scroll-behavior: smooth;
 }
+
+.cards-row {
+    position: relative;
+    isolation: isolate;
+    padding-bottom: 14px;                /* extra bottom gutter so content never touches bar */
+}
+
+.card-item { position: relative; }
+
+/* Lightning Storm below all cards; z-index for cards is set inline */
+.storm-overlay {
+    position: absolute;
+    top: 20px;
+    left: 24px;
+    transition: transform 400ms ease;
+    pointer-events: none;
+}
+
+
+/* layout + debug (unchanged) */
+.layout {
+    display: grid;
+    grid-template-columns: auto 1fr 0%;
+    padding: 18px;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+    align-items: start;
+}
+.main { grid-column: 1 / 3; display: flex; flex-direction: column; gap: 16px; }
+.controls { display: flex; flex-direction: row; gap: 10px; }
+.activation-ended { font-size: 24px; margin-top: 12px; color: #933; }
+
+.debug-panel {
+    position: fixed;
+    right: 16px;
+    top: 16px;
+    z-index: 1000;
+    background: #c7c7c7;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    padding: 8px;
+    max-width: 80vw;
+    max-height: 90vh;
+    overflow-y: auto;
+    scrollbar-gutter: stable;
+}
+.debug-summary { cursor: pointer; font-weight: bold; font-size: 16px; text-align: right; user-select: none; }
+.debug-section { display: flex; justify-content: center; align-items: flex-start; }
+.debug-col {
+    min-width: 180px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px #616161;
+    padding: 16px;
+    margin: 5px;
+    flex: 0 0 auto;
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+    font-family: Arial, sans-serif;
+}
+.deck-title { font-weight: bold; font-size: 20px; margin-bottom: 8px; text-align: center; }
+.deck-heading { font-weight: bold; margin-top: 20px; margin-bottom: 0; font-size: 18px; text-align: left; width: 100%; }
+.deck-entry { font-size: 14px; line-height: 1.3; }
+
+/*
+ok it works good but now I'd like to expand the card space to where lightning storm will be after it moves first. Basically this is the moment when the scrolling bar appears and its a bit jarring, so I want to prepare this space so that when the lightning storm moves, its not jarring
+*/
